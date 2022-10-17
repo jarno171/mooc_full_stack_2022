@@ -1,0 +1,19 @@
+# https://www.websequencediagrams.com/
+note over browser:
+the whole sequence starts, when user submits a new note
+using submit-button (AS HTTP POST operation)
+end note
+
+note over browser:
+when user submits the note, the note is first added on the
+browsers user-side page, and afterwards sent to the server
+without reloading the page
+risk: if HTTP POST fails, server side database is not updated even though UI shows updated version?
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+server->browser: HTTP-SUCCESS
+
+note over browser:
+unlike previously, new data is not requested
+end note
