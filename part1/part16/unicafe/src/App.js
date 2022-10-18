@@ -20,19 +20,30 @@ const Statetext = ({name, value}) => (
 
 const Statistics = ({good, neutral, bad}) => {
 
-  const average = (good + neutral + bad) === 0 ? 0 : (good - bad) / (good + neutral + bad)
-  const positive = ((good + neutral + bad) === 0 ? 0 : (good) / (good + neutral + bad) ) * 100
+  if (good + neutral + bad === 0) {
+    return (
+      <>
+        No feedback given
+      </>
+    )
+  }
+  else {
+    const average = (good - bad) / (good + neutral + bad)
+    const positive = (good) / (good + neutral + bad) * 100
+  
+    return (
+      <dl>
+        < Statetext name={"good\n"} value={good} />
+        < Statetext name={"neutral"} value={neutral} />
+        < Statetext name={"bad"} value={bad} />
+        < Statetext name={"all"} value={good + bad + neutral} />
+        < Statetext name={"average"} value={average} />
+        < Statetext name={"positive"} value={positive.toString() + " %"} />
+      </dl>
+    )
+  }
 
-  return (
-    <dl>
-      < Statetext name={"good\n"} value={good} />
-      < Statetext name={"neutral"} value={neutral} />
-      < Statetext name={"bad"} value={bad} />
-      < Statetext name={"all"} value={good + bad + neutral} />
-      < Statetext name={"average"} value={average} />
-      < Statetext name={"positive"} value={positive.toString() + " %"} />
-    </dl>
-  )
+  
 }
 
 
@@ -49,7 +60,7 @@ const App = () => {
       < Button text={"good"} handleClick={() => setGood(good + 1)} />
       < Button text={"neutral"} handleClick={() => setNeutral(neutral + 1)} />
       < Button text={"bad"} handleClick={() => setBad(bad + 1)}/>
-      < Header header={"give feedback"} />
+      < Header header={"statistics"} />
 
       < Statistics good={good} neutral={neutral} bad={bad} />
     </div>
