@@ -17,7 +17,7 @@ import { useState } from 'react'
 
 const Button = (props) => {
   return (
-    <button onClick={props.handleclick} >
+    <button onClick={props.handleClick} >
       {props.label}
     </button>
   )
@@ -35,16 +35,27 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  // could be dynamic
+  const [votes, setVotes] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 })
 
-  const handleClick = () => {
+  const handleClickNext = () => {
     const randomNumber = getRandomInt(0, anecdotes.length - 1)
     setSelected(randomNumber)
   }
 
+  const handleClickVote = () => {
+    const updatedVotes = { ...votes }
+    updatedVotes[selected] += 1
+    setVotes(updatedVotes)
+  }
+
   return (
     <div>
-      < Button label={"Random anecdote"} handleclick={handleClick} />
+      {/* Still uses random anecdote though, could be just looping to next? this works for the excercise */}
+      <p>< Button label={"Random anecdote"} handleClick={handleClickNext} /></p>
       <p>{anecdotes[selected]}</p>
+      <p>this anecdote has {votes[selected]} votes</p>
+      <p>< Button label={"vote"} handleClick={handleClickVote} /> </p>
     </div>
   )
 }
