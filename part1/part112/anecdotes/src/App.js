@@ -15,6 +15,21 @@ import { useState } from 'react'
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/* Search for the maximum in dictionary-object */
+function getMaxFromObject(object) {
+  let currentMax = 0
+  let currentIndex = 0
+
+  for (const [key, value] of Object.entries(object)) {
+    if (value > currentMax) {
+      currentMax = value
+      currentIndex = key
+    }
+  }
+
+  return currentIndex
+}
+
 const Button = (props) => {
   return (
     <button onClick={props.handleClick} >
@@ -52,10 +67,13 @@ const App = () => {
   return (
     <div>
       {/* Still uses random anecdote though, could be just looping to next? this works for the excercise */}
-      <p>< Button label={"Random anecdote"} handleClick={handleClickNext} /></p>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>this anecdote has {votes[selected]} votes</p>
       <p>< Button label={"vote"} handleClick={handleClickVote} /> </p>
+      <p>< Button label={"Random anecdote"} handleClick={handleClickNext} /></p>
+      <h1>anecdote with most votes</h1>
+      <p>{anecdotes[getMaxFromObject(votes)]}</p>
     </div>
   )
 }
