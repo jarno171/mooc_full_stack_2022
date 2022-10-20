@@ -5,9 +5,7 @@ const Header = (props) => (
 )
 
 const Content = (props) => (
-  <li>
-    {props.name} {props.exercises}
-  </li>
+  <p>{props.name} {props.exercises}</p>
 )
 
 const Course = (props) => {
@@ -17,11 +15,9 @@ const Course = (props) => {
   return (
     <>
       < Header text={header} />
-      <ul>
         {parts.map(part =>
           < Content key={part.id} name={part.name} exercises={part.exercises} />
         )}
-      </ul>
     </>
   )
 }
@@ -48,8 +44,15 @@ const App = () => {
       }
     ]
   }
+  
+  const sumExercises = (course.parts).reduce((accum, item) => accum + item.exercises, 0)
 
-  return <Course course={course} />
+  return (
+    <>
+      < Course course={course} />
+      <p>total of {sumExercises} exercises</p>
+    </>
+  )
 }
 
 export default App
