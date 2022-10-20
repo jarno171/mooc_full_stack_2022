@@ -53,8 +53,7 @@ const App = () => {
         return (
           < Course key={course.id} course={course} sumExercises={sumExercises} />
         )
-      }
-      )}
+      })}
     </>
   )
 }
