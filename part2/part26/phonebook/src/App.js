@@ -22,12 +22,22 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const nameObject = {
-      name: newName
-    }
 
-    setPersons(persons.concat(nameObject))
-    setNewName('')
+    // check if name is already added to persons
+    const found = persons.some(person => person.name === newName)
+
+    if (!found) {
+
+      const nameObject = {
+        name: newName
+      }
+
+      setPersons(persons.concat(nameObject))
+      setNewName('')
+    }
+    else {
+      alert(`${newName} is already on the list`)
+    }
   }
 
   return (
