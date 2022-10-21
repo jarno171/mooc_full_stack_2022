@@ -1,23 +1,8 @@
 import { useState } from 'react'
 
-const Person = (props) => {
-  const contains = props.name.includes(props.searchCriteria)
-
-  /* If name contains search criteria */
-  if (contains) {
-    return (
-      <>
-        {props.name} {props.phoneNumber}
-      </>
-    )
-  }
-  else {
-    return (
-      <>
-      </>
-    )
-  }
-}
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -26,6 +11,7 @@ const App = () => {
       phoneNumber: '040-1234567'
     }
   ]) 
+
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [searchCriteria, setSearchCriteria] = useState('')
@@ -67,32 +53,21 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with <input
-          onChange={handleFilterChange}
-        /> 
-      <form onSubmit={addName}>
-        <div>
-          name: <input 
-            value={newName}
-            onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          number: < input 
-            value={newPhoneNumber}
-            onChange={handlePhoneNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+
+      < Filter filterChange={handleFilterChange} />
+
+      <h1>add a new</h1>
+
+      < PersonForm addNameEvent={addName}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newPhoneNumber={newPhoneNumber}
+        handlePhoneNumberChange={handlePhoneNumberChange}
+      />
+
       <h2>Numbers</h2>
-      {persons.map(person => (
-        <p key={person.name}>
-          < Person name={person.name} phoneNumber={person.phoneNumber} searchCriteria={searchCriteria} />
-        </p>
-      ))}
+
+      < Persons persons={persons} searchCriteria={searchCriteria}/>
     </div>
   )
 }
