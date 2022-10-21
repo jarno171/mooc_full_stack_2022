@@ -1,11 +1,22 @@
 import { useState } from 'react'
 
 const Person = (props) => {
-  return (
-    <>
-      {props.name} {props.phoneNumber}
-    </>
-  )
+  const contains = props.name.includes(props.searchCriteria)
+
+  /* If name contains search criteria */
+  if (contains) {
+    return (
+      <>
+        {props.name} {props.phoneNumber}
+      </>
+    )
+  }
+  else {
+    return (
+      <>
+      </>
+    )
+  }
 }
 
 const App = () => {
@@ -17,6 +28,7 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
+  const [searchCriteria, setSearchCriteria] = useState('')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -24,6 +36,10 @@ const App = () => {
 
   const handlePhoneNumberChange = (event) => {
     setNewPhoneNumber(event.target.value)
+  }
+
+  const handleFilterChange = (event) => {
+    setSearchCriteria(event.target.value)
   }
 
   const addName = (event) => {
@@ -51,6 +67,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      filter shown with <input
+          onChange={handleFilterChange}
+        /> 
       <form onSubmit={addName}>
         <div>
           name: <input 
@@ -71,7 +90,7 @@ const App = () => {
       <h2>Numbers</h2>
       {persons.map(person => (
         <p key={person.name}>
-          < Person name={person.name} phoneNumber={person.phoneNumber} />
+          < Person name={person.name} phoneNumber={person.phoneNumber} searchCriteria={searchCriteria} />
         </p>
       ))}
     </div>
