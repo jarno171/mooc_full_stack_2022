@@ -3,7 +3,7 @@ import { useState } from 'react'
 const Person = (props) => {
   return (
     <>
-      {props.name}
+      {props.name} {props.phoneNumber}
     </>
   )
 }
@@ -11,13 +11,19 @@ const Person = (props) => {
 const App = () => {
   const [persons, setPersons] = useState([
     { 
-      name: 'Arto Hellas'
+      name: 'Arto Hellas',
+      phoneNumber: '040-1234567'
     }
   ]) 
   const [newName, setNewName] = useState('')
+  const [newPhoneNumber, setNewPhoneNumber] = useState('')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const handlePhoneNumberChange = (event) => {
+    setNewPhoneNumber(event.target.value)
   }
 
   const addName = (event) => {
@@ -29,11 +35,13 @@ const App = () => {
     if (!found) {
 
       const nameObject = {
-        name: newName
+        name: newName,
+        phoneNumber: newPhoneNumber
       }
 
       setPersons(persons.concat(nameObject))
       setNewName('')
+      setNewPhoneNumber('')
     }
     else {
       alert(`${newName} is already on the list`)
@@ -51,13 +59,19 @@ const App = () => {
           />
         </div>
         <div>
+          number: < input 
+            value={newPhoneNumber}
+            onChange={handlePhoneNumberChange}
+          />
+        </div>
+        <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
       {persons.map(person => (
         <p key={person.name}>
-          < Person name={person.name} />
+          < Person name={person.name} phoneNumber={person.phoneNumber} />
         </p>
       ))}
     </div>
