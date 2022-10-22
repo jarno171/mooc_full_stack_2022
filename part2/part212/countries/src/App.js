@@ -2,16 +2,22 @@ import { useEffect, useState } from 'react'
 
 import axios from 'axios'
 
-const Filter = (props) => {
+const Button = (props) => {
+  return (
+    <>
+      < button onClick={() => props.handleCountryToShowInfoChange(props.countryForInfo)}>
+        show
+      </ button >
+    </>
+  )}
 
-  const countriesFiltered = props.countries.filter((country) => {
-    return country.includes(props.searchCriteria)
-  })
+const CountryInfo = ({countryForInfo, countryData}) => {
 
-  if (countriesFiltered.length === 1) {
-    const countryForInfo = countriesFiltered[0]
+  /* Only draw if additional info country is set to be drawn */
+  if (countryForInfo !== "") {
+
     // only take first = only row
-    const countryDataForInfo = props.countryData.filter((country) => {
+    const countryDataForInfo = countryData.filter((country) => {
       return country.name.common === countryForInfo
     })[0]
 
@@ -27,23 +33,32 @@ const Filter = (props) => {
             </li>
           )
         })}</p>
-      <p>
-        < img src={countryDataForInfo.flags.png} />
-      </p>
+        <p>
+          < img src={countryDataForInfo.flags.png} alt={countryForInfo} />
+        </p>
       </div>
     )
   }
+}
+
+const Filter = (props) => {
+
+  const countriesFiltered = props.countries.filter((country) => {
+    return country.includes(props.searchCriteria)
+  })
+
 
   if (countriesFiltered.length <= 10) {
+
     return (
       <>
-      {countriesFiltered.map(country => {
-        return (
-          <p key={country}>
-            {country}
-          </p>
-        )
-      })}
+        {countriesFiltered.map(country => {
+          return (
+            <div key={country}>
+              {country} < Button countryForInfo={country} countryData={props.countryData} handleCountryToShowInfoChange={props.handleCountryToShowInfoChange} />
+            </div>
+          )
+        })}
       </>
     )
   } else {
@@ -59,9 +74,11 @@ const App = () => {
   const [countries, setCountries] = useState([ ])
   const [countryData, setCountryData] = useState({})
   const [searchCriteria, setSearchCriteria] = useState('')
+  const [countryToShowInfo, setCountryToShowInfo] = useState('')
 
   const handleFilterChange = (event) => {
     setSearchCriteria(event.target.value)
+    setCountryToShowInfo('')
   }
 
   const loadData = () => {
@@ -77,16 +94,22 @@ const App = () => {
       })
   }
 
+  const handleCountryToShowInfoChange = (countryName) => {
+    setCountryToShowInfo(countryName)
+  }
+
   useEffect(loadData, [])
 
   return (
     <div>
       <h2>find countries</h2>
       <div>
-      search countries: < input onChange={handleFilterChange} />
+        search countries: < input onChange={handleFilterChange} />
       </div>
 
-      < Filter searchCriteria={searchCriteria} countries={countries} countryData={countryData} />
+      < Filter searchCriteria={searchCriteria} countries={countries} countryData={countryData} handleCountryToShowInfoChange={handleCountryToShowInfoChange} />
+
+      < CountryInfo countryForInfo={countryToShowInfo} countryData={countryData} />
     </div>
   )
 }
