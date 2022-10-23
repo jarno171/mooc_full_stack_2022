@@ -34,10 +34,12 @@ const App = () => {
   }
 
   const removePerson = (id) => {
-    /* Remove from React state */
-    removeName(id)
     /* Then from backend */
     PersonService.remove(id)
+      .then(response => {
+        /* Remove from React state */
+        removeName(id)
+      })
   }
 
   const addName = (event) => {
@@ -48,9 +50,12 @@ const App = () => {
 
     if (!found) {
 
+      const newPersonId = Object.keys(persons).length + 1
+
       const nameObject = {
         name: newName,
-        number: newPhoneNumber
+        number: newPhoneNumber,
+        id: newPersonId
       }
 
       setPersons(persons.concat(nameObject))
