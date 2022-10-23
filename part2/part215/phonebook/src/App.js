@@ -71,8 +71,30 @@ const App = () => {
       // add new person to backend
       PersonService.create(nameObject)
     }
+    /* Update phonenumber */
     else {
-      alert(`${newName} is already on the list`)
+      const oldPerson = persons.find(person => person.name === newName)
+
+      const nameObject = {
+        name: oldPerson.name,
+        number: newPhoneNumber,
+        id: oldPerson.id
+      }
+
+      /* First update in backend, then in frontend */
+      PersonService.update(oldPerson.id, nameObject)
+        .then(response => {
+          /* Now update frontend */
+          const oldPersonIndex = persons.findIndex(person => person.name === newName)
+
+          /* This wouldnt work with object-references! */
+          const updatedArray = [ ...persons ]
+          updatedArray[oldPersonIndex]["number"] = newPhoneNumber
+
+          setPersons(updatedArray)
+          setNewName('')
+          setNewPhoneNumber('')
+        })
     }
   }
 
