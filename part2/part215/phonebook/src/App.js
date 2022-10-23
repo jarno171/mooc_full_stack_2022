@@ -34,12 +34,18 @@ const App = () => {
   }
 
   const removePerson = (id) => {
+    const personToDelete = persons.find(person => person.id === id)
+
+    const toDelete = window.confirm(`Do you really want to delete ${personToDelete.name}?`)
+
+    if (toDelete) {
     /* Then from backend */
     PersonService.remove(id)
       .then(response => {
         /* Remove from React state */
         removeName(id)
       })
+    }
   }
 
   const addName = (event) => {
