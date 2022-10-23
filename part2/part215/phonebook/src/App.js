@@ -33,6 +33,13 @@ const App = () => {
     setSearchCriteria(event.target.value)
   }
 
+  const removePerson = (id) => {
+    /* Remove from React state */
+    removeName(id)
+    /* Then from backend */
+    PersonService.remove(id)
+  }
+
   const addName = (event) => {
     event.preventDefault()
 
@@ -58,6 +65,12 @@ const App = () => {
     }
   }
 
+  const removeName = (id) => {
+    const removed = persons.filter(person => person.id !== id)
+
+    setPersons(removed)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -75,7 +88,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      < Persons persons={persons} searchCriteria={searchCriteria}/>
+      < Persons persons={persons} searchCriteria={searchCriteria} removePersonFunction={(id) => removePerson(id)}/>
     </div>
   )
 }

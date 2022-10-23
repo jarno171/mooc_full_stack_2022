@@ -24,7 +24,10 @@ const Persons = (props) => {
         <>
             {props.persons.map(person => (
                 <p key={person.name}>
-                < Person name={person.name} number={person.number} searchCriteria={props.searchCriteria} />
+                  < Person name={person.name} number={person.number} searchCriteria={props.searchCriteria} />
+                  < button onClick={() => props.removePersonFunction(person.id)} >
+                    delete
+                  </ button >
                 </p>
             ))}
         </>
