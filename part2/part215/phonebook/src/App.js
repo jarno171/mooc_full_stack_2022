@@ -4,7 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
-import axios from 'axios'
+import PersonService from './components/PersonService'
 
 const App = () => {
   const [persons, setPersons] = useState([ ])
@@ -12,13 +12,10 @@ const App = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [searchCriteria, setSearchCriteria] = useState('')
 
-  const baseUrl = 'http://localhost:3001/persons'
-
   const updateUiData = () => {
-    axios
-      .get(`${baseUrl}`)
-      .then(response => {
-        setPersons(response.data)
+    PersonService.getAll()
+      .then (response => {
+        setPersons(response)
       })
   }
 
@@ -36,11 +33,6 @@ const App = () => {
     setSearchCriteria(event.target.value)
   }
 
-  const createPerson = newObject => {
-    const request = axios.post(baseUrl, newObject)
-    return request.then(response => response.data)
-  }
-
   const addName = (event) => {
     event.preventDefault()
 
@@ -51,8 +43,7 @@ const App = () => {
 
       const nameObject = {
         name: newName,
-        number: newPhoneNumber,
-        id: Object.keys(persons).length + 1
+        number: newPhoneNumber
       }
 
       setPersons(persons.concat(nameObject))
@@ -60,7 +51,7 @@ const App = () => {
       setNewPhoneNumber('')
 
       // add new person to backend
-      createPerson(nameObject)
+      PersonService.create(nameObject)
     }
     else {
       alert(`${newName} is already on the list`)
