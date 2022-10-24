@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
+import ErrorBar from './components/ErrorBar'
 
 import PersonService from './components/PersonService'
 
@@ -11,6 +13,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [searchCriteria, setSearchCriteria] = useState('')
+  const [updateMessage, setUpdateMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const updateUiData = () => {
     PersonService.getAll()
@@ -31,6 +35,11 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     setSearchCriteria(event.target.value)
+  }
+
+  const updateNotification = (message) => {
+    setUpdateMessage(message)
+    setTimeout(() => setUpdateMessage(""), 5000)
   }
 
   const removePerson = (id) => {
@@ -70,6 +79,8 @@ const App = () => {
 
       // add new person to backend
       PersonService.create(nameObject)
+
+      updateNotification(`Added new person ${newName}`)
     }
     /* Update phonenumber */
     else {
@@ -98,6 +109,14 @@ const App = () => {
             setPersons(updatedArray)
             setNewName('')
             setNewPhoneNumber('')
+            updateNotification(`Updated phone number of ${newName}`)
+          })
+          .catch(error => {
+            setErrorMessage(`Person '${oldPerson.name}' was already removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            setPersons(persons.filter(person => person.name !== newName))
           })
       }
     }
@@ -112,6 +131,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      < Notification message={updateMessage} />
+      < ErrorBar message={errorMessage} />
 
       < Filter filterChange={handleFilterChange} />
 
