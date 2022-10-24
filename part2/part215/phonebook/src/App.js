@@ -75,26 +75,31 @@ const App = () => {
     else {
       const oldPerson = persons.find(person => person.name === newName)
 
-      const nameObject = {
-        name: oldPerson.name,
-        number: newPhoneNumber,
-        id: oldPerson.id
+      const toUpdate = window.confirm(`${oldPerson.name} is already added on the list, replace the phone number with a new one?`)
+
+      if (toUpdate) {
+
+        const nameObject = {
+          name: oldPerson.name,
+          number: newPhoneNumber,
+          id: oldPerson.id
+        }
+
+        /* First update in backend, then in frontend */
+        PersonService.update(oldPerson.id, nameObject)
+          .then(response => {
+            /* Now update frontend */
+            const oldPersonIndex = persons.findIndex(person => person.name === newName)
+
+            /* This wouldnt work with object-references! */
+            const updatedArray = [ ...persons ]
+            updatedArray[oldPersonIndex]["number"] = newPhoneNumber
+
+            setPersons(updatedArray)
+            setNewName('')
+            setNewPhoneNumber('')
+          })
       }
-
-      /* First update in backend, then in frontend */
-      PersonService.update(oldPerson.id, nameObject)
-        .then(response => {
-          /* Now update frontend */
-          const oldPersonIndex = persons.findIndex(person => person.name === newName)
-
-          /* This wouldnt work with object-references! */
-          const updatedArray = [ ...persons ]
-          updatedArray[oldPersonIndex]["number"] = newPhoneNumber
-
-          setPersons(updatedArray)
-          setNewName('')
-          setNewPhoneNumber('')
-        })
     }
   }
 
